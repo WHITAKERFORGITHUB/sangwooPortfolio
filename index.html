@@ -10,8 +10,69 @@
     <meta property="og:image" content="https://whitakerforgithub.github.io/sangwooPortfolio/sangwoo.png">
     <meta property="og:url" content="https://whitakerforgithub.github.io/sangwooPortfolio">
     <meta property="og:type" content="website">
+
+    <style>
+        .on {
+            display: block;
+        }
+
+        img {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>상우 포트폴리오</h1>
+    <div class="sangwoo_img_seq">
+        <img class="evt_five_million_seq1 on" src="./g80_black.png" aria-hidden="true">
+        <img class="evt_five_million_seq2" src="./g80_silver.png" aria-hidden="true">
+        <img class="evt_five_million_seq3" src="./g80_white.png" aria-hidden="true">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script>
+        var imageSeq = 1;  // 첫 번째 이미지부터 시작
+        var timing = 1000; // 기본 1초 타이머
+        var intervalId;
+
+        let imageUrls = [
+            "./g80_black.png",
+            "./g80_silver.png",
+            "./g80_white.png"
+        ];
+
+        var totalImages = imageUrls.length;
+
+        // 모든 이미지 로드 완료 후 슬라이드 쇼 시작
+        let loadPromises = imageUrls.map(url => {
+            return new Promise((resolve, reject) => {
+                let img = new Image();
+                img.src = url;
+                img.onload = resolve;
+                img.onerror = reject;
+            });
+        });
+
+        // 이미지 전환 인터벌 클리어
+        clearInterval(intervalId);
+
+        Promise.all(loadPromises)
+            .then(() => {
+                // 첫 번째 이미지는 이미 .on 상태로 표시됨
+                intervalId = setInterval(updateImage, timing);
+            })
+            .catch((error) => console.log(error));
+
+        function updateImage() {
+            // 현재 이미지를 숨기고 다음 이미지로 넘어감
+            $('.evt_five_million_seq' + imageSeq).removeClass('on');
+
+            // 이미지 시퀀스 업데이트
+            imageSeq = (imageSeq % totalImages) + 1;
+
+            // 다음 이미지를 보여줌
+            $('.evt_five_million_seq' + imageSeq).addClass('on');
+        }
+    </script>
 </body>
 </html>
